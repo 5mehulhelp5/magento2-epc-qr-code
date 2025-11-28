@@ -26,7 +26,8 @@ class QrCodeRenderer
     public function __construct(
         private readonly Reader $configReader,
         private readonly UrlInterface $url,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly UrlHasher $urlHasher
     ) {
     }
 
@@ -99,7 +100,7 @@ class QrCodeRenderer
     {
         $src = $this->configReader->isEpcQrCodeImageSrcBase64Encoded() ?
             $this->getBase64EncodedQrCode($order) :
-            $this->url->getBaseUrl() . sprintf('epc-qr-code/image/png/order_id/%s', $order->getId());
+            $this->url->getBaseUrl() . sprintf('epc-qr-code/image/png/order_id/%s/hash/%s', $order->getId(), $this->urlHasher->createHashForOrder($order));
 
         if ($src === null) {
             return null;

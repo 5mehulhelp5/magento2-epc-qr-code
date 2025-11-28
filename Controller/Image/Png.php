@@ -8,9 +8,13 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use SchrammelCodes\EpcQrCode\Model\Config\Reader as ConfigReader;
 use SchrammelCodes\EpcQrCode\Model\QrCodeRenderer;
+use SchrammelCodes\EpcQrCode\Model\UrlHasher;
 
 class Png implements HttpGetActionInterface
 {
@@ -19,7 +23,8 @@ class Png implements HttpGetActionInterface
         private readonly RequestInterface $request,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly QrCodeRenderer $qrCodeRenderer,
-        private readonly RawFactory $resultFactory
+        private readonly RawFactory $resultFactory,
+        private readonly UrlHasher $urlHasher
     ) {
     }
 
@@ -38,7 +43,19 @@ class Png implements HttpGetActionInterface
         }
 
         $orderId = $this->request->getParam('order_id');
-        $order = $this->orderRepository->get($orderId);
+        try {
+            $order = is_numeric($orderId) ? $this->orderRepository->get($orderId) : null;
+        } catch (NoSuchEntityException) {
+        }
+
+        if (!isset($order) || !$order instanceof OrderInterface) {
+            throw new NotFoundException(__('Order with ID %s not found', $orderId));
+        }
+
+        if ($this->request->getParam('hash') !== $this->urlHasher->createHashForOrder($order)) {
+            throw new NotFoundException(__('Invalid hash'));
+        }
+
         $qrCode = $this->qrCodeRenderer->getRawPngQrCode($order);
 
         if (!$qrCode) {
