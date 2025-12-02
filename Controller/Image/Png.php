@@ -52,7 +52,9 @@ class Png implements HttpGetActionInterface
             throw new NotFoundException(__('Order with ID %s not found', $orderId));
         }
 
-        if ($this->request->getParam('hash') !== $this->urlHasher->createHashForOrder($order)) {
+        if ($this->urlHasher->shouldVerifyHashForOrder($order) &&
+            $this->request->getParam('hash') !== $this->urlHasher->createHashForOrder($order)
+        ) {
             throw new NotFoundException(__('Invalid hash'));
         }
 
