@@ -1,6 +1,9 @@
 # Changelog
+## [2.1.0] - 2025-12-03
+* Enable upgrades from 1.x to 2.1.0 onwards by introducing a hash check bypass on orders placed prior to v2.1.0 upgrade [PR #12](https://github.com/schrammel-codes/magento2-epc-qr-code/pull/12)
+
 ## [2.0.0] - 2025-11-28
-* [BREAKDING CHANGE]  Harden security on public QR code UR [PR #10](https://github.com/schrammel-codes/magento2-epc-qr-code/pull/10) - contributed by [rommelfreddy](https://github.com/rommelfreddy)
+* [BREAKING CHANGE]  Harden security on public QR code URL [PR #10](https://github.com/schrammel-codes/magento2-epc-qr-code/pull/10) - contributed by [rommelfreddy](https://github.com/rommelfreddy)
 
 ## [1.1.2] - 2025-07-01
 ### Fixed

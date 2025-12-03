@@ -16,6 +16,7 @@
 * [🛠️ Configuration](#configuration)
 * [🗓️ Usage](#usage)
 * [⛙ Contribution](#contribution)
+* [⬆️  Upgrade](#upgrade)
 * [⚖️ License](#license)
 
 ## 📝 Summary
@@ -64,9 +65,18 @@ used to render the QR code image tag in the frontend:
 
 If the prerequisites to render the QR code are not met, the methods will return `null`.
 
+## ⬆️  Upgrade
+### Migration path from `1.x` to `2.1` onwards
+As `2.0.0` introduced a breaking change by introducing a hash check on public EPC QR code URLs to avoid order probing, `2.1.0` introduces
+an upgrade timestamp flag, automatically bypassing the has validation on orders that got placed prior to that date but keeping the check
+mandatory on newer orders.
+
+If you've been on version 1.x before already, make sure to directly upgrade to a version >= 2.1.0 to ensure your customers don't see broken
+QR code images in their older order confirmation emails.
+
 ## ⛙ Contribution
 Contributions are welcome! If you have any suggestions, feature requests or issues, please [create a new issue](https://github.com/schrammel-codes/magento2-epc-qr-code/issues)
 or [submit a pull request](https://github.com/schrammel-codes/magento2-epc-qr-code/pulls).
 
 ## ⚖️ License
-[MIT](https://opensource.org/licenses/MIT) Copyright (c) 2024 Dipl.-Ing. Andreas Schrammel, BSc.
+[MIT](https://opensource.org/licenses/MIT) Copyright (c) 2024-2025 Dipl.-Ing. Andreas Schrammel, BSc.
